@@ -30,7 +30,7 @@ This is a temporary solution for llama-30b with lora to run on affordable hardwa
 ## Usage
 
 1. Download pretrained llama-30 in hf format (recommended):
-> python download-model.py decapoda-research/llama-30b-hf
+    > python download-model.py decapoda-research/llama-30b-hf
 
 ~~to convert the model manually: (very slow)~~
 
@@ -40,20 +40,20 @@ This is a temporary solution for llama-30b with lora to run on affordable hardwa
 
 2. Train a LoRA or use an existing one
 
-e.g. https://huggingface.co/baseten/alpaca-30b
+    e.g. https://huggingface.co/baseten/alpaca-30b
 > 
 
 3. Merge lora with original 30b model. (export_ckpt script in the origin alpaca-lora repository does not work after quantization somehow, they just generate random unreadable characters)
 
-> python  conversion_tools/LLaMA-8bit-LoRA/custom_merge_adapter_weights.py --base_name=<path_to_base_model>  --model_name=<path_to_lora> --output_dir=<path_to_save_merged_model>
+     > python  conversion_tools/LLaMA-8bit-LoRA/custom_merge_adapter_weights.py --base_name=<path_to_base_model>  --model_name=<path_to_lora> --output_dir=<path_to_save_merged_model>
 
 4. quantize the model (4 bit).
 
-> CUDA_VISIBLE_DEVICES=0 python3 repositories/GPTQ-for-LLaMa/llama.py <path_to_merged_model> c4 --wbits 4 --save <path_to_quantized_model>.pt
+    > CUDA_VISIBLE_DEVICES=0 python3 repositories/GPTQ-for-LLaMa/llama.py <path_to_merged_model> c4 --wbits 4 --save <path_to_quantized_model>.pt
 
 5. Put merged model and quantized model in models/ directory and run:
 
-> python3 server.py --listen --listen-port=7861 --model llama-30b --gptq-bits 4
+    > python3 server.py --listen --listen-port=7861 --model llama-30b --gptq-bits 4
 
 ## Thanks to
  - [qwopqwop200/GPTQ-for-LLaMa](https://github.com/qwopqwop200/GPTQ-for-LLaMa/tree/468c47c01b4fe370616747b6d69a2d3f48bab5e4)
